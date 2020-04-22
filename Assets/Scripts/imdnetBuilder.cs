@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
+using TMPro;
 using Debug = UnityEngine.Debug;
+using UnityEngine.UI;
 
 public class imdnetBuilder : MonoBehaviour
 {
@@ -24,49 +26,66 @@ public class imdnetBuilder : MonoBehaviour
     private static string MSBUILD_EXE_PATH;
     private static string IMDN_SLN_PATH;
 
-    //private static string[] EXCLUSION_DIRS;
+    private static string EXPORTED_DLL_PATH;
+    private static string FINAL_DLL_EXPORT_PATH;
 
     private Progress<ZipProgress> progress;
 
     private float progressPer;
+    private int unzipNum;
+    private int lastReportPer;
+
+    [SerializeField] private bool isStartProcessOnAwake;
+
+    [Space(15f), SerializeField] private RectTransform progressBarRT;
+    [SerializeField] private TextMeshProUGUI progressParText;
 
     private void Awake()
     {
         STREAMINGASSETS = Application.dataPath + "/StreamingAssets";
 
         IMDN_URL = "https://github.com/libimobiledevice-win32/imobiledevice-net/archive/v1.2.186.zip";
-        ZIP_PATH = Application.dataPath + "/StreamingAssets/v1.2.186.zip";
-        UNZIP_PATH = Application.dataPath + "/StreamingAssets/imdn";
-        MSBUILD_ZIP_PATH = Application.dataPath + "/StreamingAssets/msbuild_net472.zip";
-        MSBUILD_PATH = Application.dataPath + "/StreamingAssets/msbuild/net472/MSBuild/Current/Bin";
+        ZIP_PATH = STREAMINGASSETS + "/v1.2.186.zip";
+        UNZIP_PATH = STREAMINGASSETS + "/imdn";
+        MSBUILD_ZIP_PATH = STREAMINGASSETS + "/msbuild_net472.zip";
+        MSBUILD_PATH = STREAMINGASSETS + "/msbuild/net472/MSBuild/Current/Bin";
 
-        RESTORE_BAT_PATH = Application.dataPath + "/StreamingAssets/restore.bat";
-        BUILD_BAT_PATH = Application.dataPath + "/StreamingAssets/build.bat";
+        RESTORE_BAT_PATH = STREAMINGASSETS + "/restore.bat";
+        BUILD_BAT_PATH = STREAMINGASSETS + "/build.bat";
 
         IMDN_SLN_PATH = UNZIP_PATH + "/imobiledevice-net-1.2.186/iMobileDevice.NET.sln";
         MSBUILD_EXE_PATH = MSBUILD_PATH + "/MSBuild.exe";
 
-        //var bp = UNZIP_PATH + "/imobiledevice-net-1.2.186/";
-        //EXCLUSION_DIRS = new String[1];
-        //EXCLUSION_DIRS[0] = bp + "iMobileDevice.Generator";
-        //EXCLUSION_DIRS[1] = bp + "iMobileDevice.Generator.Tests";
-        //EXCLUSION_DIRS[2] = bp + "iMobileDevice.IntegrationTests.net45";
-        //EXCLUSION_DIRS[3] = bp + "iMobileDevice.IntegrationTests.netcoreapp30";
-        //EXCLUSION_DIRS[4] = bp + "iMobileDevice.Tests";
-        //EXCLUSION_DIRS[5] = bp + "iMobileDevice-net.Demo";
+        EXPORTED_DLL_PATH = UNZIP_PATH + "/imobiledevice-net-1.2.186/iMobileDevice-net/bin/Release/net45/iMobileDevice-net.dll";
+        FINAL_DLL_EXPORT_PATH = STREAMINGASSETS + "/iMobileDevice-net.dll";
+
+        unzipNum = 1;
+        lastReportPer = 0;
+    }
+
+    public void Start()
+    {
+        if (isStartProcessOnAwake)
+            StartProcess();
     }
 
     public void StartProcess()
     {
-        progress = new Progress<ZipProgress>();
-        progress.ProgressChanged += Report; progressPer = 0;
+        SetProgressBarValue(0);
+
+        if (File.Exists(FINAL_DLL_EXPORT_PATH))
+            File.Delete(FINAL_DLL_EXPORT_PATH);
 
         progressPer = 0;
 
         StartCoroutine(downloadWithProgress(IMDN_URL
             , (progress) =>
             {
-                Debug.Log("Downloading " + (progress * 100f).ToString("F2") + " %");
+                var p = (progress * 100f).ToString("F0");
+                SetProgressBarValue((int)(float.Parse(p) / 4f));
+
+                if(p != "0")
+                    Debug.Log("Downloading " + p + " %");
             }));
     }
 
@@ -101,23 +120,13 @@ public class imdnetBuilder : MonoBehaviour
 
     private async void Extract()
     {
+        progress = new Progress<ZipProgress>();
+        progress.ProgressChanged += Report;
+
         await Task.Run(() => UnZipTask(ZIP_PATH, UNZIP_PATH));
 
-        //await Task.Run(() => {
-        //    try
-        //    {
-        //        foreach (var dir in EXCLUSION_DIRS)
-        //        {
-        //            Directory.Delete(dir, true);
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Debug.LogError(e);
-        //    }
-        //});
-
-        await Task.Run(() => UnZipTask(MSBUILD_ZIP_PATH, STREAMINGASSETS));
+        if(File.Exists(MSBUILD_ZIP_PATH))
+            await Task.Run(() => UnZipTask(MSBUILD_ZIP_PATH, STREAMINGASSETS));
 
         Debug.Log("Build");
         BuildImdn();
@@ -133,10 +142,16 @@ public class imdnetBuilder : MonoBehaviour
     {
         progressPer = ((float)zipProgress.Processed / (float)zipProgress.Total) * 100f;
 
-        Debug.Log("Extract " + progressPer.ToString("F2") + " %");
+        var p = progressPer.ToString("F0");
+        Debug.Log("Extract " + unzipNum + "/2 : " + p + " %");
+
+        lastReportPer = int.Parse(p);
+
+        SetProgressBarValue((int)((float)lastReportPer / 4f) + (25 * unzipNum));
 
         if (zipProgress.Total == zipProgress.Processed)
         {
+            unzipNum++;
             Debug.Log("Extract is done");
         }
     }
@@ -172,15 +187,109 @@ public class imdnetBuilder : MonoBehaviour
         });
 
         Debug.Log("bat file saved");
+        Debug.Log("building...");
 
-        await Task.Run(() => {
-            ExtUtils.Command(RESTORE_BAT_PATH);
+        SetProgressBarValue(80);
+
+        await Task.Run(() =>
+        {
+            Command("\"" + RESTORE_BAT_PATH + "\"");
         });
 
-        await Task.Run(() => {
-            ExtUtils.Command(BUILD_BAT_PATH);
+        SetProgressBarValue(90);
+
+        await Task.Run(() =>
+        {
+            Command("\"" + BUILD_BAT_PATH + "\"");
         });
 
         Debug.Log("dll exported");
+
+        SetProgressBarValue(95);
+
+        if (!File.Exists(EXPORTED_DLL_PATH))
+        {
+            Debug.LogError("Does not exist exported dll file");
+
+            progressBarRT.gameObject.GetComponent<Image>().color = Color.red;
+        }
+        else
+        {
+            Debug.Log("Existed dll file");
+
+            File.Move(EXPORTED_DLL_PATH, FINAL_DLL_EXPORT_PATH);
+
+            Directory.Delete(UNZIP_PATH, true);
+            File.Delete(ZIP_PATH);
+            File.Delete(BUILD_BAT_PATH);
+            File.Delete(RESTORE_BAT_PATH);
+
+            if (File.Exists(MSBUILD_ZIP_PATH))
+                File.Delete(MSBUILD_ZIP_PATH);
+
+            Debug.Log("Clean Up");
+
+            SetProgressBarValue(100);
+
+            Debug.Log("Done :)");
+        }
+    }
+
+    public static string Command(string cmd)
+    {
+        var p = new Process();
+        string output = "";
+
+        switch (Application.platform)
+        {
+            case RuntimePlatform.WindowsEditor:
+            case RuntimePlatform.WindowsPlayer:
+                p.StartInfo.FileName = "C:\\Windows\\System32\\cmd.exe";
+                p.StartInfo.Arguments = "/c " + cmd;
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.Start();
+
+                output = p.StandardOutput.ReadToEnd();
+                p.WaitForExit();
+                p.Close();
+
+                break;
+            default:
+                Debug.LogError("Can not identify the OS on which the editor is running");
+                break;
+        }
+
+        return output;
+    }
+
+    public void Delete(string targetDirectoryPath)
+    {
+        if (!Directory.Exists(targetDirectoryPath))
+        {
+            return;
+        }
+
+        string[] filePaths = Directory.GetFiles(targetDirectoryPath);
+        foreach (string filePath in filePaths)
+        {
+            File.SetAttributes(filePath, FileAttributes.Normal);
+            File.Delete(filePath);
+        }
+
+        string[] directoryPaths = Directory.GetDirectories(targetDirectoryPath);
+        foreach (string directoryPath in directoryPaths)
+        {
+            Delete(directoryPath);
+        }
+
+        Directory.Delete(targetDirectoryPath, false);
+    }
+
+    private void SetProgressBarValue(int value)
+    {
+        var p = (float)value * 5.5f;
+        progressBarRT.sizeDelta = new Vector2(p, 0);
+        progressParText.text = value.ToString() + "%";
     }
 }
