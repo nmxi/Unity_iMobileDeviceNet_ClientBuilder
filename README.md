@@ -14,6 +14,6 @@ __The source code of imobiledevice-net is not included in this project.__ the ne
 
 For details, please refer to Licence displayed in the application.
 
-# LICENCE
+# LICENSE
 
 MIT
