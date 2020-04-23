@@ -56,7 +56,7 @@ public class imdnetBuilder : MonoBehaviour
         IMDN_SLN_PATH = UNZIP_PATH + "/imobiledevice-net-1.2.186/iMobileDevice.NET.sln";
         MSBUILD_EXE_PATH = MSBUILD_PATH + "/MSBuild.exe";
 
-        EXPORTED_DLL_PATH = UNZIP_PATH + "/imobiledevice-net-1.2.186/iMobileDevice-net/bin/Release/net45/iMobileDevice-net.dll";
+        EXPORTED_DLL_PATH = UNZIP_PATH + "/imobiledevice-net-1.2.186/iMobileDevice-net/bin/Release/netstandard2.0/iMobileDevice-net.dll";
         FINAL_DLL_EXPORT_PATH = STREAMINGASSETS + "/iMobileDevice-net.dll";
 
         unzipNum = 1;
