@@ -224,8 +224,8 @@ public class imdnetBuilder : MonoBehaviour
             File.Delete(BUILD_BAT_PATH);
             File.Delete(RESTORE_BAT_PATH);
 
-            if (File.Exists(MSBUILD_ZIP_PATH))
-                File.Delete(MSBUILD_ZIP_PATH);
+            //if (File.Exists(MSBUILD_ZIP_PATH))
+            //    File.Delete(MSBUILD_ZIP_PATH);
 
             Debug.Log("Clean Up");
 
@@ -235,7 +235,7 @@ public class imdnetBuilder : MonoBehaviour
         }
     }
 
-    public static string Command(string cmd)
+    private string Command(string cmd)
     {
         var p = new Process();
         string output = "";
@@ -261,29 +261,6 @@ public class imdnetBuilder : MonoBehaviour
         }
 
         return output;
-    }
-
-    public void Delete(string targetDirectoryPath)
-    {
-        if (!Directory.Exists(targetDirectoryPath))
-        {
-            return;
-        }
-
-        string[] filePaths = Directory.GetFiles(targetDirectoryPath);
-        foreach (string filePath in filePaths)
-        {
-            File.SetAttributes(filePath, FileAttributes.Normal);
-            File.Delete(filePath);
-        }
-
-        string[] directoryPaths = Directory.GetDirectories(targetDirectoryPath);
-        foreach (string directoryPath in directoryPaths)
-        {
-            Delete(directoryPath);
-        }
-
-        Directory.Delete(targetDirectoryPath, false);
     }
 
     private void SetProgressBarValue(int value)
