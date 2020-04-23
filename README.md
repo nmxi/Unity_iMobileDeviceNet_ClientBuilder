@@ -2,7 +2,7 @@
 
 You need to build imobiledevice-net(https://github.com/libimobiledevice-win32/imobiledevice-net), developed for .NET, into a dll for use in Unity. An easy tool to build your client to dlls is imdn-builder.
 
-The source code of imobiledevice-net is not included in this project; the necessary resources are automatically downloaded from imobiledevice-net by executing the binary available from the Release, building and outputting the dlls.
+__The source code of imobiledevice-net is not included in this project.__ the necessary resources are automatically downloaded from imobiledevice-net by executing the binary available from the Release, building and outputting the dlls.
 
 # 3rd party notice
 
