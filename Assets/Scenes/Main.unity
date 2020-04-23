@@ -1189,7 +1189,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 964.4}
+  m_SizeDelta: {x: 0, y: 1091.2}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &921680628
 MonoBehaviour:
@@ -1211,11 +1211,11 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: "THIRD PARTY NOTICE\n\n=====\nMSBuild, microsoft, MIT-Licence\n=====\n<b>GitHub
-    : </b><#00CCFF>https://github.com/microsoft/msbuild</color>\n\nThe MIT License
-    (MIT)\r\n\r\nCopyright (c) .NET Foundation and contributors\r\n\r\nAll rights
-    reserved.\r\n\r\nPermission is hereby granted, free of charge, to any person obtaining
-    a copy\r\nof this software and associated documentation files (the \"Software\"),
+  m_text: "** 3RD PARTY NOTICE **\n\n=====\nMSBuild, microsoft, MIT-Licence\n=====\n<b>GitHub
+    : </b><#00CCFF><link=\"https://github.com/microsoft/msbuild\">https://github.com/microsoft/msbuild</link></color>\n\nThe
+    MIT License (MIT)\r\n\r\nCopyright (c) .NET Foundation and contributors\r\n\r\nAll
+    rights reserved.\r\n\r\nPermission is hereby granted, free of charge, to any person
+    obtaining a copy\r\nof this software and associated documentation files (the \"Software\"),
     to deal\r\nin the Software without restriction, including without limitation the
     rights\r\nto use, copy, modify, merge, publish, distribute, sublicense, and/or
     sell\r\ncopies of the Software, and to permit persons to whom the Software is\r\nfurnished
@@ -1229,7 +1229,10 @@ MonoBehaviour:
     FROM,\r\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
     IN THE\r\nSOFTWARE.\r\n\n\n=====\nZipProgress, Scott Chamberlain\n=====\nThis
     source was borrowed from stackoverflow.\n\n<b>UserPage :</b> <#00CCFF><link=\"https://stackoverflow.com/users/80274/scott-chamberlain\">https://stackoverflow.com/users/80274/scott-chamberlain</link></color>\n<b>Source
-    :</b> <#00CCFF><link=\"https://stackoverflow.com/questions/43661211/extract-an-archive-with-progress-bar\">https://stackoverflow.com/questions/43661211/extract-an-archive-with-progress-bar</link></color>"
+    :</b> <#00CCFF><link=\"https://stackoverflow.com/questions/43661211/extract-an-archive-with-progress-bar\">https://stackoverflow.com/questions/43661211/extract-an-archive-with-progress-bar</link></color>\n\n\n=====\nTools
+    Cross Settings Synmbol For Interface, <link=\"https://www.flaticon.com/authors/freepik\">Freepik</link>\n=====\nIcons
+    made by <#00CCFF><link=\"https://www.flaticon.com/authors/freepik\">Freepik</color></link>
+    from <#00CCFF><link=\"https://www.flaticon.com/\">www.flaticon.com</color>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1298,12 +1301,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 921680628}
-    characterCount: 1498
+    characterCount: 1612
     spriteCount: 0
-    spaceCount: 212
-    wordCount: 211
-    linkCount: 2
-    lineCount: 46
+    spaceCount: 231
+    wordCount: 226
+    linkCount: 5
+    lineCount: 52
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0
@@ -1556,7 +1559,7 @@ RectTransform:
   m_Father: {fileID: 1713112974}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.6443385}
+  m_AnchorMin: {x: 0, y: 0.68566716}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
@@ -2371,7 +2374,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -0.000001675447}
-  m_SizeDelta: {x: 0, y: 964.4}
+  m_SizeDelta: {x: 0, y: 1091.2}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1793089056
 GameObject:
@@ -2811,7 +2814,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1054155499}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.35566154
+  m_Size: 0.31433287
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3014,7 +3017,7 @@ PrefabInstance:
     - target: {fileID: 224671642673878178, guid: 55abec7d6832f46fea72ac38ef269343,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.000015258789
+      value: 0.0000041127205
       objectReference: {fileID: 0}
     - target: {fileID: 224806149343734184, guid: 55abec7d6832f46fea72ac38ef269343,
         type: 3}
