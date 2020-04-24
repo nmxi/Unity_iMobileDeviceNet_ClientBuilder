@@ -1,4 +1,4 @@
-# Unity_iMobileDeviceNet_ClientBuilder
+# Unity_iMobileDeviceNet_ClientBuilder (imdn-builder)
 
 You need to build imobiledevice-net(https://github.com/libimobiledevice-win32/imobiledevice-net), developed for .NET, into a dll for use in Unity. An easy tool to build your client to dlls is imdn-builder.
 
